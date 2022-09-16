@@ -1,0 +1,268 @@
+<head>
+	<script src="https://code.jquery.com/jquery-3.4.1.js"
+		integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js@1.2.6/dist/web3.min.js"></script>
+	
+	<link href="./stylesheet/consumer.css" rel='stylesheet' type='text/css'>
+   <!-- <script src="./agri.js"></script> -->
+   
+</head>
+   <body>
+    <div class="form" id="sign-up-form">
+        <h2 class="form-title">Consumer</h2>
+        <input type="text" class="input-std" id="caddr" placeholder="Consumer address">
+		<input type="text" class="input-std" id="cname" placeholder="Consumer Name">
+        <input type="text" class="input-std" id="contact" placeholder="Phone">
+		<input type="text" class="input-std" id="loc" placeholder="Location">
+        <input type="text" class="input-std" id="product_name" placeholder="Product Name">
+        <input type="text" class="input-std" id="brand_name" placeholder="Brand Name">
+	    <!-- <label>Food Quality: </label>
+        <br>
+        &nbsp; &nbsp;
+        <input type = "radio" name = "Food Quality" id = "Organic">
+        
+        <span id = "Organic">Organic</span>
+        &nbsp; &nbsp; &nbsp;
+        <input type = "radio"  name = "Food Quality" id = "Inorganic">
+       
+        <span id = "Inorganic">Inorganic</span>
+        &nbsp; &nbsp; &nbsp;
+        <input type = "radio"  name = "Food Quality" id = "Hybrid">
+        
+        <span id = "Hybrid">Hybrid</span> -->
+        <!-- <br><br> -->
+		<input type="text" class="input-std" id="food_quality" placeholder="Food Quality">
+		<input type="text" class="input-std" id="quantity" placeholder="Quantity">
+		<input type="text" class="input-std" id="exprice" placeholder="Expected Price">
+	
+		<input type="submit" class="btn-submit" value="Submit Details" id="SubmitDetails"><br><br><br>
+
+		<input type="text" class="input-std" id="cid" placeholder="Consumer Id">
+        <input type="button" class="btn-submit" value="Get Details" id="get_details"><br><br>
+
+		<!-- <input type="button" class="btn-submit" href = "allSellToConsumer.html" style="color: black; font-size: 30px; text-align:center;" value="Buy Product" id="buy_product"><br><br> -->
+
+		&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
+		<a style="color: black; font-size: 30px; text-align:center;  width: 300px;
+		height: 100px; " button type="button" class="btn-submit" id="setvalue" onclick="set()" href = "allSellToConsumer.html">Buy Product</a>
+
+        <div>
+            <p id="Consumer_address"></p>
+            <p id="Consumer_name"></p>
+            <p id="Consumer_phone"></p>
+            <p id="Consumer_location"></p>
+            <p id="Product_Name"></p>
+            <p id="Product_Brand_Name"></p>
+            <p id="Food_Quality"></p>
+            <p id="Product_Quantity"></p>
+            <p id="Product_Expected_Price"></p>
+
+        </div>
+	</div>
+	<script type="text/javascript">
+
+		var web3;
+		if (typeof web3 !== 'undefined') {
+				web3 = new Web3(web3.currentProvider);
+		}
+		else {
+			web3 = new Web3(new Web3.providers.HttpProvider("http://127.0.0.1:7545"));
+	
+		}
+		console.log(web3);
+	   
+		web3.eth.defaultAccount = web3.eth.accounts[0];
+
+		var abi = [
+		[
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_consumer_id",
+				"type": "uint256"
+			}
+		],
+		"name": "getConsumerInfos",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			},
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			},
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			},
+			{
+				"internalType": "int256",
+				"name": "",
+				"type": "int256"
+			},
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_consumer_address",
+				"type": "address"
+			},
+			{
+				"internalType": "string",
+				"name": "c_name",
+				"type": "string"
+			},
+			{
+				"internalType": "int256",
+				"name": "_phone_no",
+				"type": "int256"
+			},
+			{
+				"internalType": "string",
+				"name": "loc",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_product_name",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_brand_name",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_food_quality",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_quantity",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "e_price",
+				"type": "string"
+			}
+		],
+		"name": "storeConsumerInfo",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	}
+]
+]
+		
+		contract = new web3.eth.Contract(abi, "0xd948bd953a9a5421f734273bf7432F4d504B76D7");
+
+		$(document).ready(function () {
+			$("#SubmitDetails").click(function () {
+				console.log("Submit Details has been clicked!")
+				// Blockchain cal
+					var acnt = $("#caddr").val();
+					//var fid = $("#fid").val();
+					
+					var cname = $("#cname").val();	
+					var contact = $("#contact").val();
+					var loc = $("#loc").val();
+                    var product_name = $("#product_name").val();
+                    var brand_name = $("#brand_name").val();
+                    var food_quality = $("#food_quality").val();
+                    var quantity = $("#quantity").val();
+                    var exprice = $("#exprice").val();
+					console.log(acnt, cname, contact, loc, product_name, brand_name, food_quality, quantity, exprice);	
+	
+					contract.methods.storeConsumerInfo(acnt, cname, contact, loc, product_name, brand_name, food_quality, quantity, exprice).send({ 
+						from: "0x906aEB5F733dF4f5f9D240302cd4060f91D1f131",
+					})
+					.then(function (trx) {
+						console.log(trx);
+						alert("successfully added");
+					})
+
+					
+			});
+			$("#get_details").click(function () {
+				console.log("Get Details has been clicked!")
+				// Blockchain cal
+					//var acnt = $("#farmer_address").val();
+					var cid = $("#cid").val();
+					
+					//var fname = $("#farmer_name").val();	
+					//var contact = $("#contact").val();
+					//var loc = $("#loc").val();
+					console.log(cid);
+					contract.methods.getConsumerInfos(cid).call(function(error, result){ 
+						console.log(result);
+						let Consumer_address = result[1];
+						let Consumer_name = result[2];
+						let Consumer_phone = result[3];
+						let Consumer_location = result[4];
+                        let Product_Name = result[5];
+                        let Product_Brand_Name = result[6];
+                        let Food_Quality = result[7];
+                        let Product_Quantity = result[8];
+                        let Product_Expected_Price = result[9];
+
+
+						document.getElementById("Consumer_address").innerHTML = "Consumer Address: " + Consumer_address;
+						document.getElementById("Consumer_name").innerHTML = "Consumer Name: " + Consumer_name;
+						document.getElementById("Consumer_phone").innerHTML = "Consumer Phone:" + Consumer_phone;
+						document.getElementById("Consumer_location").innerHTML ="Consumer Location: " + Consumer_location;
+                        document.getElementById("Product_Name").innerHTML ="Product_Name: " + Product_Name;
+                        document.getElementById("Product_Brand_Name").innerHTML ="Product_Brand_Name: " + Product_Brand_Name;
+                        document.getElementById("Food_Quantity").innerHTML ="Food_Quantity: " + Food_Quantity;
+						document.getElementById("product_Quantity").innerHTML ="Product_Quantity: " + Product_Quantity;
+                        document.getElementById("Product_Expected_Price").innerHTML ="Product_Expected_Price: " + Product_Expected_Price;
+					});
+					
+					
+	
+	
+		});
+	});
+	</script>
+</body>
+</html>

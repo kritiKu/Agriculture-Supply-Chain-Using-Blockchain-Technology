@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+	<style>
+		#tableEntry {
+			font-family: Arial, Helvetica, sans-serif;
+			border-collapse: collapse;
+			width: 100%;
+		  }
+		  
+		  #tableEntry td, #customers th {
+			border: 1px solid #ddd;
+			padding: 8px;
+		  }
+		  
+		  #tableEntry tr:nth-child(even){background-color: #f2f2f2;}
+		  
+		  #tableEntry:hover {background-color: #ddd;}
+		  
+		  #tableEntry th {
+			padding-top: 12px;
+			padding-bottom: 12px;
+			text-align: left;
+			background-color: #04AA6D;
+			color: white;
+		  }
+		  </style>
+	<script src="https://code.jquery.com/jquery-3.4.1.js"
+		integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js@1.2.6/dist/web3.min.js"></script>
+	
+	<link href="./stylesheet/allselltodistributor.css" rel='stylesheet' type='text/css'>
+</head>
+
+<body>
+	<table id="tableEntry" style="width:100%">
+		<tr>
+			<th>SerialId</th>
+			<th>Processor Id</th>
+			<th>Distributor Id</th>
+			<th>Product Id</th>
+            <th>Product Name</th>
+			<th>Quantity</th>
+			<th>Expected Price</th>
+			<th>Bought</th>
+		</tr>
+		<tr></tr>
+	</table>
+
+	<br><br><br>
+	<div class="form" id="sign-up-form">
+    <h2 class="form-title">Buy Product</h2>	
+	<input type="text" class="input-std" id="sid" placeholder="serial_Id">
+	<input type="text" class="input-std" id="did" placeholder="distributor_id">
+	<input type="submit" class="btn-submit" value="Buy" id="buy"><br><br>
+<script type="text/javascript">
+    console.log("Hello");
+var web3;
+		if (typeof web3 !== 'undefined') {
+				web3 = new Web3(web3.currentProvider);
+		}
+		else {
+			web3 = new Web3(new Web3.providers.HttpProvider("http://127.0.0.1:7545"));
+	
+		}
+		console.log(web3);
+	   
+		web3.eth.defaultAccount = web3.eth.accounts[0];
+
+		//var contract;
+		//var address = "0x4e8f75a6f64107d9cf9b3e5d087fd3162e45700a";
+		var abi = [
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_processorId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_productId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "_product_name",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_quantity",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_price",
+				"type": "string"
+			}
+		],
+		"name": "SellToDistributorConnect",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "SellToDistributorMap",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_processorId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_distributorId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_productId",
+				"type": "uint256"
+			}
+		],
+		"name": "SellToDistributorShow",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "ShowAllSellToDistributor",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "_totalSellToDistributor",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256[]",
+				"name": "_serial_id",
+				"type": "uint256[]"
+			},
+			{
+				"internalType": "uint256[]",
+				"name": "_processor_id",
+				"type": "uint256[]"
+			},
+			{
+				"internalType": "uint256[]",
+				"name": "__distributor_id",
+				"type": "uint256[]"
+			},
+			{
+				"internalType": "uint256[]",
+				"name": "_product_id",
+				"type": "uint256[]"
+			},
+			{
+				"internalType": "string[]",
+				"name": "_product_name",
+				"type": "string[]"
+			},
+			{
+				"internalType": "string[]",
+				"name": "_quantity",
+				"type": "string[]"
+			},
+			{
+				"internalType": "string[]",
+				"name": "_Price",
+				"type": "string[]"
+			},
+			{
+				"internalType": "bool[]",
+				"name": "_bought",
+				"type": "bool[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_serialId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_distributor_id",
+				"type": "uint256"
+			}
+		],
+		"name": "buyByDistributorId",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "entryMap2",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "processor_id",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "distributor_id",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "product_id",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "product_name",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "quantity",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "Price",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "SeialId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "bool",
+				"name": "bought",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_serialId",
+				"type": "uint256"
+			}
+		],
+		"name": "showSellToDistributorBySerialId",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	}
+]
+
+contract = new web3.eth.Contract(abi, "0xbc6EB81D99326775e2eAE4cE85C9E85f8c77AeDe");
+console.log("hello2");
+$(document).ready(function () {
+    console.log("hello3");
+    
+   // ShowAllSellToProcessor.methods.getAllSellToProcessor().call(function (error, result){
+      	contract.methods.ShowAllSellToDistributor().call(function (error, result){
+
+        console.log("hello1");
+        // console.log(result);
+
+        var totalSellToRetailor = result[0];
+		var sid = result[1];
+        var pid = result[2];
+        var did = result[3];
+        var productid = result[4];
+		var productname = result[5];
+		var quantity = result[6];
+		var price = result[7];
+		var bought = result[8];
+
+		// console.log(crop_name);
+
+		for (let i=0; i < totalSellToRetailor; i++){
+			document.getElementById("tableEntry").innerHTML += "<tr>"+"<td>"+sid[i]+"</td>"+"<td>"+pid[i]+"</td>"+"<td>"+did[i]+"</td>"+"<td>"+productid[i]+"</td>"+"<td>"+ productname[i]+"</td>"+"<td>"+quantity[i]+"</td>"+"<td>"+price[i]+"</td>"+"<td>"+bought[i]+"</td>"+"</tr>"
+		}
+    });
+	$("#buy").click(function () {
+            console.log("Buy button has been clicked!")
+            // Blockchain call
+                    
+            var sid = $("#sid").val();	
+            var did = $("#did").val();
+            
+            console.log(sid, did);	
+
+       contract.methods.buyByDistributorId(sid, did).send({ 
+       from: "0xf3A1D302C8e95077637C6De781181d4716B25326",
+       })
+       .then(function (trx ) {
+        console.log(trx);
+        alert("successfully added");
+        });
+    }); 
+});
+
+</script>
+</body>
+</html> 

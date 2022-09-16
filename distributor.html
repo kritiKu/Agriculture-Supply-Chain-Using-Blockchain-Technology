@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script src="https://code.jquery.com/jquery-3.4.1.js"
+		integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js@1.2.6/dist/web3.min.js"></script>
+	
+	<link href="./stylesheet/distributor.css" rel='stylesheet' type='text/css'>
+   <!-- <script src="./agri.js"></script> -->
+   
+</head>
+<body>
+ <div class="form" id="sign-up-form">
+	 <h2 class="form-title">Distributor</h2>
+       
+	 <input type="text" class="input-std" id="daddr" placeholder="Dist address">
+     <input type="text" class="input-std" id="dname" placeholder="Distrinutor Name">
+     <input type="text" class="input-std" id="productId" placeholder="Product Id">
+     <input type="text" class="input-std" id="loc" placeholder="Location">
+     <input type="text" class="input-std" id="transpotation_charge" placeholder="Transpotation charge">
+     <input type="text" class="input-std" id="contact" placeholder="Phone">
+     <input type="text" class="input-std" id="quantity" placeholder="Quantity">
+     <input type="text" class="input-std" id="exprice" placeholder="Expected Price">
+     <input type="submit" class="btn-submit" value="Submit Details" id="SubmitDetails"><br><br><br>
+
+<input type="text" class="input-std" id="did" placeholder="Distributor Id">
+<input type="button" class="btn-submit" value="Get Details" id="get_details"><br><br>
+
+<!-- <input type="button" class="btn-submit" href = "allSellToDistributor.html" style="color: black; font-size: 30px; text-align:center;" value="Buy Product" id="buy_product"><br><br> -->
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
+		<a style="color: black; font-size: 30px; text-align:center;  width: 300px;
+		height: 100px; " button type="button" class="btn-submit" id="setvalue" onclick="set()" href = "allSellToDistributor.html">Buy Crops</a>
+
+        <div>
+            <p id="Distributor_address"></p>
+            <p id="Distributor_name"></p>
+            <p id="Product_Id"></p>
+            <p id="Distributor_location"></p>
+            <p id="Product_transpotation_charge"></p>
+            <p id="Distributor_Phone"></p>
+            <p id="Product_Quantity"></p>
+            <p id="Product_Expected_Price"></p>
+           
+
+        </div>
+	</div>
+	<script type="text/javascript">
+
+		var web3;
+		if (typeof web3 !== 'undefined') {
+				web3 = new Web3(web3.currentProvider);
+		}
+		else {
+			web3 = new Web3(new Web3.providers.HttpProvider("http://127.0.0.1:7545"));
+	
+		}
+		console.log(web3);
+	   
+		web3.eth.defaultAccount = web3.eth.accounts[0];
+
+		var abi = [
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_distributor_id",
+				"type": "uint256"
+			}
+		],
+		"name": "getDistributorInfos",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			},
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			},
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			},
+			{
+				"internalType": "int256",
+				"name": "",
+				"type": "int256"
+			},
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_distributor_address",
+				"type": "address"
+			},
+			{
+				"internalType": "string",
+				"name": "d_name",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_productId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "loc",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "t_charge",
+				"type": "uint256"
+			},
+			{
+				"internalType": "int256",
+				"name": "_phone_no",
+				"type": "int256"
+			},
+			{
+				"internalType": "string",
+				"name": "_quantity",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "e_price",
+				"type": "string"
+			}
+		],
+		"name": "storeDistributorInfo",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	}
+]
+
+		
+		contract = new web3.eth.Contract(abi, "0x29928D0f2a550014A22451F360c4629fC37781EE");
+
+		$(document).ready(function () {
+			$("#SubmitDetails").click(function () {
+				console.log("Submit Details has been clicked!")
+				// Blockchain cal
+					var acnt = $("#daddr").val();
+					//var fid = $("#fid").val();
+					
+					var dname = $("#dname").val();	
+                    var productId = $("#productId").val();
+                    var loc = $("#loc").val();
+                    var transpotation_charge = $("#transpotation_charge").val();
+					var contact = $("#contact").val();
+                    var quantity = $("#quantity").val();
+                    var exprice = $("#exprice").val();
+					
+					console.log(acnt, dname, productId, loc,transpotation_charge, contact, quantity, exprice);	
+	
+					contract.methods.storeDistributorInfo(acnt, dname, productId, loc,transpotation_charge, contact, quantity, exprice).send({ 
+						from: "0x0Af8d6f7748d44108Cd68D43FCf91565a431CCed",
+
+					})
+					.then(function (trx) {
+						console.log(trx);
+						alert("successfully added");
+					})
+
+					
+			});
+			$("#get_details").click(function () {
+				console.log("Get Details has been clicked!")
+				// Blockchain cal
+					//var acnt = $("#farmer_address").val();
+					var did = $("#did").val();
+					
+					//var fname = $("#farmer_name").val();	
+					//var contact = $("#contact").val();
+					//var loc = $("#loc").val();
+					console.log(did);
+					contract.methods.getDistributorInfos(did).call(function(error, result){ 
+						console.log(result);
+						let Distributor_address = result[1];
+						let Distributor_name = result[2];
+						let Product_Id = result[3];
+						let Distributor_location = result[4];
+                        let Product_transpotation_charge = result[5];
+                        let Distributor_Phone = result[6];
+                        let Product_Quantity = result[7];
+                        let Product_Expected_Price = result[8];
+
+
+
+						document.getElementById("Distributor_address").innerHTML = "Distributor Address: " + Distributor_address;
+						document.getElementById("Distributor_name").innerHTML = "Distributor Name: " + Distributor_name;
+						document.getElementById("Product_Id").innerHTML = "Product Id:" + Product_Id;
+						document.getElementById("Distributor_location").innerHTML ="Distributor Location: " + Distributor_location;
+                        document.getElementById("Product_transpotation_charge").innerHTML ="Product Transpotation charge: " + Product_transpotation_charge;
+                        document.getElementById("Distributor_Phone").innerHTML ="Distributor Phone: " + Distributor_Phone;
+                        document.getElementById("Distributor_Quantity").innerHTML ="Distributor Quantity: " + Distributor_Quantity;
+                        document.getElementById("Product_Expected_price").innerHTML ="Product Expected price: " + Product_Expected_price;
+					});
+					
+					
+	
+	
+		});
+	});
+	</script>
+</body>
+</html>

@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <style>
+		#tableEntry {
+			font-family: Arial, Helvetica, sans-serif;
+			border-collapse: collapse;
+			width: 100%;
+		  }
+		  
+		  #tableEntry td, #customers th {
+			border: 1px solid #ddd;
+			padding: 8px;
+		  }
+		  
+		  #tableEntry tr:nth-child(even){background-color: #f2f2f2;}
+		  
+		  #tableEntry:hover {background-color: #ddd;}
+		  
+		  #tableEntry th {
+			padding-top: 12px;
+			padding-bottom: 12px;
+			text-align: left;
+			background-color: #04AA6D;
+			color: white;
+		  }
+		  </style>
+	<script src="https://code.jquery.com/jquery-3.4.1.js"
+		integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js@1.2.6/dist/web3.min.js"></script>
+	
+	<link href="./stylesheet/allselltoconsumer.css" rel='stylesheet' type='text/css'>
+</head>
+
+<body>
+	<table id="tableEntry" style="width:100%">
+		<tr>
+			<th>SerialId</th>
+			<th>Retailor Id</th>
+			<th>consumer Id</th>
+			<th>Product Id</th>
+            <th>Product Name</th>
+			<th>Quantity</th>
+			<th>Expected Price</th>
+			<th>Bought</th>
+			<!-- <input type="button" class="btn-submit" value="Buy" id="buy"><br><br> -->
+		</tr>
+		<tr></tr>
+	</table>
+
+	<br><br><br>	
+	<div class="form" id="sign-up-form">
+    <h2 class="form-title">Buy Product</h2>
+	<input type="text" class="input-std" id="sid" placeholder="serial_Id">
+	<input type="text" class="input-std" id="cid" placeholder="consumer_id">
+	<input type="submit" class="btn-submit" value="Buy" id="buy"><br><br>
+<script type="text/javascript">
+    console.log("Hello");
+var web3;
+		if (typeof web3 !== 'undefined') {
+				web3 = new Web3(web3.currentProvider);
+		}
+		else {
+			web3 = new Web3(new Web3.providers.HttpProvider("http://127.0.0.1:7545"));
+	
+		}
+		console.log(web3);
+	   
+		web3.eth.defaultAccount = web3.eth.accounts[0];
+
+		//var contract;
+		//var address = "0x4e8f75a6f64107d9cf9b3e5d087fd3162e45700a";
+		var abi = [
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_serialId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_consumer_id",
+				"type": "uint256"
+			}
+		],
+		"name": "buyByConsumerId",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_retailorId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_productId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "_product_name",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_quantity",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_price",
+				"type": "string"
+			}
+		],
+		"name": "SellToConsumerConnect",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "entryMap4",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "retailor_id",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "consumer_id",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "product_id",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "product_name",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "quantity",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "Price",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "SeialId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "bool",
+				"name": "bought",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "Sell_To_ConsumerMap",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_retailorId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_consumerId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_productId",
+				"type": "uint256"
+			}
+		],
+		"name": "SellToConsumerShow",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "ShowAllSellToConsumer",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "_totalSellToConsumer",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256[]",
+				"name": "_serial_id",
+				"type": "uint256[]"
+			},
+			{
+				"internalType": "uint256[]",
+				"name": "_retailor_id",
+				"type": "uint256[]"
+			},
+			{
+				"internalType": "uint256[]",
+				"name": "_consumer_id",
+				"type": "uint256[]"
+			},
+			{
+				"internalType": "uint256[]",
+				"name": "_product_id",
+				"type": "uint256[]"
+			},
+			{
+				"internalType": "string[]",
+				"name": "_product_name",
+				"type": "string[]"
+			},
+			{
+				"internalType": "string[]",
+				"name": "_quantity",
+				"type": "string[]"
+			},
+			{
+				"internalType": "string[]",
+				"name": "_Price",
+				"type": "string[]"
+			},
+			{
+				"internalType": "bool[]",
+				"name": "_bought",
+				"type": "bool[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_serialId",
+				"type": "uint256"
+			}
+		],
+		"name": "showSellToConsumerBySerialId",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	}
+]
+contract = new web3.eth.Contract(abi, "0x58b74ec9652FC3c4B9B5D16031BE89cA834559c8");
+console.log("hello2");
+$(document).ready(function () {
+
+    console.log("hello3");
+    
+   // ShowAllSellToProcessor.methods.getAllSellToProcessor().call(function (error, result){
+      	contract.methods.ShowAllSellToConsumer().call(function (error, result){
+
+        console.log("hello1");
+        // console.log(result);
+
+        var totalSellToConsumer = result[0];
+		var sid = result[1];
+        var rid = result[2];
+        var cid = result[3];
+        var productid = result[4];
+		var productname = result[5];
+		var quantity = result[6];
+		var price = result[7];
+		var bought = result[8];
+
+		console.log(sid);
+
+		// console.log(crop_name);
+
+		for (let i=0; i < totalSellToConsumer; i++){
+			//document.getElementById("tableEntry").innerHTML += "<tr>"+"<td>"+fid[i]+"</td>"+"<td>"+pid[i]+"</td>"+"<td>"+cid[i]+"</td>"+"<td>"+ crop_name[i]+"</td>"+"<td>"+quantity[i]+"</td>"+"<td>"+price[i]+"</td>"+"<td><input type='button' class='btn-submit' value='Buy' id='buy'></td>"+"</tr>"
+			document.getElementById("tableEntry").innerHTML += "<tr>"+"<td>"+sid[i]+"</td>"+"<td>"+rid[i]+"</td>"+"<td>"+cid[i]+"</td>"+"<td>"+productid[i]+"</td>"+"<td>"+ productname[i]+"</td>"+"<td>"+quantity[i]+"</td>"+"<td>"+price[i]+"</td>"+"<td>"+bought[i]+"</td>"+"</tr>"
+		}
+    });
+	$("#buy").click(function () {
+            console.log("Buy button has been clicked!")
+            // Blockchain call
+                    
+            var sid = $("#sid").val();	
+            var cid = $("#cid").val();
+            
+            console.log(sid, cid);	
+
+       contract.methods.buyByConsumerId(sid, cid).send({ 
+       from: "0xf3A1D302C8e95077637C6De781181d4716B25326",
+       })
+       .then(function (trx ) {
+        console.log(trx);
+        alert("successfully added");
+        });
+    }); 
+});
+	
+</script>
+</body>
+</html> 
+

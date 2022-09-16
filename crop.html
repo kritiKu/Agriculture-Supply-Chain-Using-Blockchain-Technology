@@ -1,0 +1,199 @@
+<head>
+
+	<script src="https://code.jquery.com/jquery-3.4.1.js"
+		integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js@1.2.6/dist/web3.min.js"></script>
+	
+	<link href="./stylesheet/crop.css" rel='stylesheet' type='text/css'>
+</head>
+
+<body>
+    <div class="form" id="sign-up-form">
+        <h2 class="form-title">Crop</h2>
+		<input type="text" class="input-std" id="caddr" placeholder="Crop Address">
+        <input type="text" class="input-std" id="crop_name" placeholder="Crop Name">
+        <input type="text" class="input-std" id="pesticides" placeholder="Pesticides Name">
+	    <input type="text" class="input-std" id="seed" placeholder="Seed">
+		<input type="text" class="input-std" id="quantity" placeholder="Quantity">
+		<input type="text" class="input-std" id="exprice" placeholder="Expected Price">
+		<input type="submit" class="btn-submit" value="Submit Details" id="SubmitDetails"><br><br><br>
+
+		<input type="text" class="input-std" id="cid" placeholder="crop Id">
+        <input type="button" class="btn-submit" value="Get Details" id="get_details"><br><br>
+      
+
+	  <div>
+		<p id="Crop_address"></p>
+		<p id="Crop_name"></p>
+		<p id="PesticideS_Name"></p>
+		<p id="Seed"></p>
+		<p id="Crop_Quantity"></p>
+        <p id="Expected_Price"></p>
+	</div>
+</div>
+
+<script type="text/javascript">
+
+var web3;
+		if (typeof web3 !== 'undefined') {
+				web3 = new Web3(web3.currentProvider);
+		}
+		else {
+			web3 = new Web3(new Web3.providers.HttpProvider("http://127.0.0.1:7545"));
+	
+		}
+		console.log(web3);
+	   
+		web3.eth.defaultAccount = web3.eth.accounts[0];
+
+		//var contract;
+		//var address = "0x4e8f75a6f64107d9cf9b3e5d087fd3162e45700a";
+		var abi =[
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_product_id",
+				"type": "uint256"
+			}
+		],
+		"name": "getCropInfos",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			},
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			},
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_crop_address",
+				"type": "address"
+			},
+			{
+				"internalType": "string",
+				"name": "_crop_name",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_pesticides_name",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_seed",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_quantity",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_expected_price",
+				"type": "string"
+			}
+		],
+		"name": "storeCropInfo",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	}
+]
+
+contract = new web3.eth.Contract(abi, "0xa7613B74A09F70F2d40e5059D1f9045f5c5b9aA8");
+
+
+$(document).ready(function () {
+	$("#SubmitDetails").click(function () {
+			console.log("Submit Details has been clicked!")
+			// Blockchain cal
+			var acnt = $("#caddr").val();
+			//var fid = $("#fid").val();
+					
+			var crop_name = $("#crop_name").val();	
+			var pesticides = $("#pesticides").val();
+			var seed = $("#seed").val();
+			var quantity = $("#quantity").val();
+			var exprice = $("#exprice").val();
+
+			console.log(acnt, crop_name, pesticides, seed, quantity, exprice);	
+	
+			contract.methods.storeCropInfo(acnt, crop_name, pesticides, seed, quantity, exprice ).send({ 
+				from: "0x66Ad57fa29a77da7318EEcF49b56176dDb9BA68f",
+			})
+			.then(function (trx) {
+			console.log(trx);
+			alert("successfully added");
+		    })
+
+					
+	});
+	$("#get_details").click(function () {
+		    console.log("Get Details has been clicked!")
+		    // Blockchain cal
+					//var acnt = $("#farmer_address").val();
+			var cid = $("#cid").val();
+					
+					//var fname = $("#farmer_name").val();	
+					//var contact = $("#contact").val();
+					//var loc = $("#loc").val();
+			console.log(cid);
+			contract.methods.getCropInfos(cid).call(function(error, result){ 
+			console.log(result);
+			let Crop_address = result[1];
+			let Crop_name = result[2];
+			let PesticideS_Name = result[3];
+			let Seed = result[4];
+			let Crop_Quantity = result[5];
+			let Expected_Price = result[6];
+
+			document.getElementById("Crop_address").innerHTML = "Crop Address: " + Crop_address;
+			document.getElementById("Crop_name").innerHTML = "Crop Name: " + Crop_name;
+			document.getElementById("PesticideS_Name").innerHTML = "Pesticides Name:" + PesticideS_Name;
+			document.getElementById("Seed").innerHTML ="Seed: " + Seed;
+			document.getElementById("Crop_Quantity").innerHTML ="Quantity: " + Crop_Quantity;
+			document.getElementById("Expected_Price").innerHTML ="Expected Price: " + Expected_Price;
+		    });
+		});	
+});
+</script>
+</body>
+</html>

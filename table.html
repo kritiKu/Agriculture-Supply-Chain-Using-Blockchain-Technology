@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link href="./stylesheet/allselltoprocessor.css" rel='stylesheet' type='text/css'>
+    <script src="./agri.js"></script>
+    <style type = "text/css">
+
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        .table, th, td {
+             border:1px solid black;
+        }
+        .body{
+            background-color:  #ffffff;
+            font-family: sans-serif;
+        }
+    
+        .table-container {
+            padding: 0 10%;
+            margin: 40px auto 0;
+        }
+        .heading{
+            font-size: 40px;
+            text-align: center;
+            color: #f1f1f1;
+            margin-bottom: 40px;
+        }
+        .table{
+            width: 100%;
+            border: 1px solid black;
+        }
+        .table thead{
+            background-color: green;
+        }
+        .table thead tr th{
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 0.35px;
+            color: #ffffff;
+            opacity: 1;
+            padding:  12px;
+            vertical-align: top;
+            border: 1px solid black;
+        }
+        .table thead tr td{
+            font-size: 14px;
+            letter-spacing: 00.35px;
+            font-weight: normal;
+            color: #f1f1f1;
+            background-color: green;
+            padding: 8px;
+            text-align: center;
+            border: 1px solid black;
+        }
+        .table .text_open{
+            font-size: 14px;
+            font-weight: bold;
+            letter-spacing: 0.3px; 
+            color: #ff1046;
+        }
+        .table .body tr td .btn{
+            width: 130px;
+            text-decoration: none;
+            line-height: 35px;
+            display: inline-block;
+            background-color: green;
+            font-weight: medium;
+            color: #ffffff;
+            text-align: center;
+            vertical-align: middle;
+            user-select: none;
+            border: 1px solid transparent;
+            font-size: 14px;
+            opacity: 1;
+        } 
+        @media (max-width: 768px){
+            .table thead{
+                display: none;
+            }
+            .table .table thead, .table tr, .table td{
+                display: block;
+                width: 100%;
+            }
+            .table tbody tr td{
+                text-align: right;
+                padding-left: 50%;
+                position: relative;
+            }
+            .table td:before{
+                content: attr(data-label);
+                position: absolute;
+                left: 0;
+                width: 50%;
+                padding-left: 15px;
+                font-weight: 600;
+                font-size: 14px;
+                text-align:  left;
+            }
+        }
+    </style>
+ </head> 
+    <body>
+        <!-- <div class="form" id="sign-up-form"> -->
+            <div class="table-container">
+            <h2 class="form-title">Sell To Processor</h2>
+            <table class="table">
+            <!-- <button onclick="add">Add Row</button> -->
+            <thead>
+                <tr>
+                    <th>SID</th>
+                    <th>Farmer Id</th>
+                    <th>Crop Id</th>
+                    <th>Crop Name</th>
+                    <th>Quantity</th>
+                    <th>Expected Price</th>
+                    <th>Bought</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td data-label="SID">66</td>
+                    <td data-label="Farmer Id">8</td>
+                    <td data-label="Crop Id">9</td>
+                    <td data-label="Crop Name">gg</td>
+                    <td data-label="Quantity">99</td>
+                    <td data-label="Expectd Price">99</td>
+                    <td data-label="#" href = "buy.html"><a href="#" class = "btn">BUY</a></td>
+                </tr> 
+            </tbody>    
+          </div>
+       
+       </body>
+</html>

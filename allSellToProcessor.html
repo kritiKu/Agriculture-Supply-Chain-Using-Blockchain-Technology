@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <!-- <style>
+       table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+table, th, td {
+  border: 1px solid black;
+  border-radius: 10px;
+}
+
+
+        </style> -->
+<style>
+		#tableEntry {
+			font-family: Arial, Helvetica, sans-serif;
+			border-collapse: collapse;
+			width: 100%;
+		  }
+		  
+		  #tableEntry td, #customers th {
+			border: 1px solid #ddd;
+			padding: 8px;
+		  }
+		  
+		  #tableEntry tr:nth-child(even){background-color: #f2f2f2;}
+		  
+		  #tableEntry:hover {background-color: #ddd;}
+		  
+		  #tableEntry th {
+			padding-top: 12px;
+			padding-bottom: 12px;
+			text-align: left;
+			background-color: #04AA6D;
+			color: white;
+		  }
+		  </style>
+	<script src="https://code.jquery.com/jquery-3.4.1.js"
+		integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js@1.2.6/dist/web3.min.js"></script>
+	
+	<link href="./stylesheet/allSelltoprocessor.css" rel='stylesheet' type='text/css'>
+</head>
+
+<body>
+	<table id="tableEntry" style="width:100%">
+		<tr>
+			<th style="font-size: 20px;">SerialId</th>
+			<th style="font-size: 20px;">Farmer Id</th>
+			<th style="font-size: 20px;">Processor Id</th>
+			<th style="font-size: 20px;">Crop Id</th>
+            <th style="font-size: 20px;">Crop Name</th>
+			<th style="font-size: 20px;">Quantity</th>
+			<th style="font-size: 20px;">Expected Price</th>
+			<th style="font-size: 20px;">Bought</th>
+			<!-- <input type="button" class="btn-submit" value="Buy" id="buy"><br><br> -->
+		</tr>
+		<tr></tr>
+	</table>
+
+	<br><br><br><br><br>
+	<div class="form" id="sign-up-form">
+        <h2 class="form-title">Buy Crop</h2>
+	<input type="text" class="input-std" id="pid" placeholder="processor_id">
+	<input type="text" class="input-std" id="sid" placeholder="serial_Id">
+	<input type="submit" class="btn-submit" value="Buy" id="buy"><br><br>
+	<div>
+<script type="text/javascript">
+    console.log("Hello");
+var web3;
+		if (typeof web3 !== 'undefined') {
+				web3 = new Web3(web3.currentProvider);
+		}
+		else {
+			web3 = new Web3(new Web3.providers.HttpProvider("http://127.0.0.1:7545"));
+	
+		}
+		console.log(web3);
+	   
+		web3.eth.defaultAccount = web3.eth.accounts[0];
+
+		//var contract;
+		//var address = "0x4e8f75a6f64107d9cf9b3e5d087fd3162e45700a";
+		var abi = [
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_serialId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_processor_id",
+				"type": "uint256"
+			}
+		],
+		"name": "buyByProcessorId",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_farmerId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_cropId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "_crop_name",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_quantity",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_price",
+				"type": "string"
+			}
+		],
+		"name": "SellToProcessorConnect",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "entryMap1",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "farmer_id",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "processor_id",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "crop_id",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "crop_name",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "quantity",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "Price",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "SeialId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "bool",
+				"name": "bought",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "SellToProcessorMap",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_farmerId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_processorId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_cropId",
+				"type": "uint256"
+			}
+		],
+		"name": "SellToProcessorShow",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "ShowAllSellToProcessor",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "_totalSellToProcessor",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256[]",
+				"name": "_serial_id",
+				"type": "uint256[]"
+			},
+			{
+				"internalType": "uint256[]",
+				"name": "_farmer_id",
+				"type": "uint256[]"
+			},
+			{
+				"internalType": "uint256[]",
+				"name": "_processor_id",
+				"type": "uint256[]"
+			},
+			{
+				"internalType": "uint256[]",
+				"name": "_crop_id",
+				"type": "uint256[]"
+			},
+			{
+				"internalType": "string[]",
+				"name": "_crop_name",
+				"type": "string[]"
+			},
+			{
+				"internalType": "string[]",
+				"name": "_quantity",
+				"type": "string[]"
+			},
+			{
+				"internalType": "string[]",
+				"name": "_Price",
+				"type": "string[]"
+			},
+			{
+				"internalType": "bool[]",
+				"name": "_bought",
+				"type": "bool[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_serialId",
+				"type": "uint256"
+			}
+		],
+		"name": "showSellToProcessorBySerialId",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	}
+]
+contract = new web3.eth.Contract(abi, "0x90d7a2e021d80959E264CCd41ef221C71ec5b566");
+console.log("hello2");
+$(document).ready(function () {
+
+    console.log("hello3");
+    
+   // ShowAllSellToProcessor.methods.getAllSellToProcessor().call(function (error, result){
+      	contract.methods.ShowAllSellToProcessor().call(function (error, result){
+
+        console.log("hello1");
+        // console.log(result);
+
+        var totalSellToProcessor = result[0];
+		var sid = result[1];
+        var fid = result[2];
+        var pid = result[3];
+        var cid = result[4];
+		var crop_name = result[5];
+		var quantity = result[6];
+		var price = result[7];
+		var bought = result[8];
+
+		console.log(sid);
+
+		// console.log(crop_name);
+
+		for (let i=0; i < totalSellToProcessor; i++){
+			//document.getElementById("tableEntry").innerHTML += "<tr>"+"<td>"+fid[i]+"</td>"+"<td>"+pid[i]+"</td>"+"<td>"+cid[i]+"</td>"+"<td>"+ crop_name[i]+"</td>"+"<td>"+quantity[i]+"</td>"+"<td>"+price[i]+"</td>"+"<td><input type='button' class='btn-submit' value='Buy' id='buy'></td>"+"</tr>"
+			document.getElementById("tableEntry").innerHTML += "<tr>"+"<td>"+sid[i]+"</td>"+"<td>"+fid[i]+"</td>"+"<td>"+pid[i]+"</td>"+"<td>"+cid[i]+"</td>"+"<td>"+ crop_name[i]+"</td>"+"<td>"+quantity[i]+"</td>"+"<td>"+price[i]+"</td>"+"<td>"+bought[i]+"</td>"+"</tr>"
+		}
+    });
+	$("#buy").click(function () {
+            console.log("Buy button has been clicked!")
+            // Blockchain call
+                    
+            var sid = $("#sid").val();	
+            var pid = $("#pid").val();
+            
+            console.log(sid, pid);	
+
+       contract.methods.buyByProcessorId(sid, pid).send({ 
+       from: "0x66Ad57fa29a77da7318EEcF49b56176dDb9BA68f",
+       })
+       .then(function (trx ) {
+        console.log(trx);
+        alert("successfully added");
+        });
+    }); 
+});
+	
+</script>
+</body>
+</html> 
+

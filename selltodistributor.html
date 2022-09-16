@@ -1,0 +1,362 @@
+<head>
+    <script src="https://code.jquery.com/jquery-3.4.1.js"
+		integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js@1.2.6/dist/web3.min.js"></script>
+	
+    <link href="./stylesheet/selltodistributor.css" rel='stylesheet' type='text/css'>
+    
+ </head>  
+    <body>
+        <div class="form" id="sign-up-form">
+            <h2 class="form-title">Sell To Distributor</h2>
+            <input type="text" class="input-std" id="pid" placeholder="processor_Id">
+            <!-- <input type="text" class="input-std" id="did" placeholder="distributor_Id"> -->
+            <input type="text" class="input-std" id="productid" placeholder="Product_Id">
+            <input type="text" class="input-std" id="productname" placeholder="Product_Name">
+            <input type="text" class="input-std" id="quantity" placeholder="Quantity">
+            <input type="text" class="input-std" id="exprice" placeholder= "Price">
+            <input type="submit" class="btn-submit" value="Submit Details" id="SubmitDetails"><br><br><br>
+            <input type="text" class="input-std" id="sid" placeholder="Serial Id">
+            <input type="button" class="btn-submit" value="Get Details" id="get_details"><br><br>
+ 
+            <div>
+            
+            <p id="processor_Id"></p>
+            <!-- <p id="distributor_Id"></p> -->
+            <p id="Product_Id"></p>
+            <p id="Product_name"></p>
+            <p id="Quantity"></p>
+            <p id="Price"></p>
+    
+    
+             </div>
+        </div>
+        <script type="text/javascript">
+
+            var web3;
+                    if (typeof web3 !== 'undefined') {
+                            web3 = new Web3(web3.currentProvider);
+                    }
+                    else {
+                        web3 = new Web3(new Web3.providers.HttpProvider("http://127.0.0.1:7545"));
+                
+                    }
+                    console.log(web3);
+                   
+                    web3.eth.defaultAccount = web3.eth.accounts[0];
+            
+                    //var contract;
+                    //var address = "0x4e8f75a6f64107d9cf9b3e5d087fd3162e45700a";
+                    var abi = [
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_processorId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_productId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "_product_name",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_quantity",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_price",
+				"type": "string"
+			}
+		],
+		"name": "SellToDistributorConnect",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "SellToDistributorMap",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_processorId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_distributorId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_productId",
+				"type": "uint256"
+			}
+		],
+		"name": "SellToDistributorShow",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "ShowAllSellToDistributor",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "_totalSellToDistributor",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256[]",
+				"name": "_serial_id",
+				"type": "uint256[]"
+			},
+			{
+				"internalType": "uint256[]",
+				"name": "_processor_id",
+				"type": "uint256[]"
+			},
+			{
+				"internalType": "uint256[]",
+				"name": "__distributor_id",
+				"type": "uint256[]"
+			},
+			{
+				"internalType": "uint256[]",
+				"name": "_product_id",
+				"type": "uint256[]"
+			},
+			{
+				"internalType": "string[]",
+				"name": "_product_name",
+				"type": "string[]"
+			},
+			{
+				"internalType": "string[]",
+				"name": "_quantity",
+				"type": "string[]"
+			},
+			{
+				"internalType": "string[]",
+				"name": "_Price",
+				"type": "string[]"
+			},
+			{
+				"internalType": "bool[]",
+				"name": "_bought",
+				"type": "bool[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_serialId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_distributor_id",
+				"type": "uint256"
+			}
+		],
+		"name": "buyByDistributorId",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "entryMap2",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "processor_id",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "distributor_id",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "product_id",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "product_name",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "quantity",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "Price",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "SeialId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "bool",
+				"name": "bought",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_serialId",
+				"type": "uint256"
+			}
+		],
+		"name": "showSellToDistributorBySerialId",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	}
+]
+                    
+contract = new web3.eth.Contract(abi, "0xbc6EB81D99326775e2eAE4cE85C9E85f8c77AeDe");
+                
+                
+                $(document).ready(function () {
+                    $("#SubmitDetails").click(function () {
+                            console.log("Submit Details has been clicked!")
+                            // Blockchain cal
+                                    
+                            var pid = $("#pid").val();	
+                            // var did = $("#did").val();
+                            var productid = $("#productid").val();
+                            
+                            var product_name = $("#productname").val();
+                            var quantity = $("#quantity").val();
+                            var exprice = $("#exprice").val();
+                
+                            console.log(pid, productid, product_name, quantity, exprice);	
+	
+			contract.methods.SellToDistributorConnect(pid, productid, product_name, quantity, exprice).send({ 
+				from: "0xf3A1D302C8e95077637C6De781181d4716B25326",
+			})
+			.then(function (trx ) {
+			console.log(trx);
+			alert("successfully added");
+		    });
+        }); 
+        $("#get_details").click(function () {
+               console.log("Get Details has been clicked!")
+               // Blockchain cal
+                  //var acnt = $("#farmer_address").val();
+                  var sid = $("#sid").val();
+                  
+                 
+                  console.log(sid);
+                  contract.methods.showSellToDistributorBySerialId(sid).call(function(error, result){ 
+                     console.log(result);
+            
+                     let Product_name = result[0];
+                     let Quantity = result[1];
+                     let Price = result[2];
+   
+                     
+                     document.getElementById("Product_name").innerHTML = "Product_name: " + Product_name;
+                     document.getElementById("Quantity").innerHTML = "Quantity:" + Quantity;
+                     document.getElementById("Price").innerHTML ="Price: " + Price;
+                  });        
+      
+      
+         });
+      });          
+                        	
+               
+</script>
+</body>
+</html> 

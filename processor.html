@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script src="https://code.jquery.com/jquery-3.4.1.js"
+		integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js@1.2.6/dist/web3.min.js"></script>
+	
+	<link href="./stylesheet/processor.css" rel='stylesheet' type='text/css'>
+   <!-- <script src="./agri.js"></script> -->
+   
+</head>
+   <body>
+    <div class="form" id="sign-up-form">
+        <h2 class="form-title">Processor</h2>
+        <input type="text" class="input-std" id="paddr" placeholder="Processor address">
+        <input type="text" class="input-std" id="pname" placeholder="Processor Name">
+        <input type="text" class="input-std" id="productId" placeholder="Product Id">
+        <input type="text" class="input-std" id="loc" placeholder="Location">
+		<input type="text" class="input-std" id="seed" placeholder="Seed">
+        <input type="text" class="input-std" id="contact" placeholder="Phone">
+        <input type="text" class="input-std" id="quantity" placeholder="Quantity">
+        <input type="text" class="input-std" id="production_date" placeholder="Production date">
+        <input type="text" class="input-std" id="Expiry_date" placeholder="Expiry date">
+        <input type="text" class="input-std" id="exprice" placeholder="Expected Price">
+	
+		<input type="submit" class="btn-submit" value="Submit Details" id="SubmitDetails"><br><br><br>
+
+		<input type="text" class="input-std" id="pid" placeholder="Processor Id">
+        <input type="button" class="btn-submit" value="Get Details" id="get_details"><br><br>
+
+		<!-- <input type="button" class="btn-submit" href = "allSellToProcessor.html" style="color: black; font-size: 30px; text-align:center;" value="Buy Crop" id="buy_crop"><br><br> -->
+		<!-- <input type="button" class="btn-submit" href = "allSellToProcessor.html" value="Buy Crop" id="buy_crop"><br><br> --> 
+        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
+		<a style="color: black; font-size: 30px; text-align:center;  width: 300px;
+		height: 100px; " button type="button" class="btn-submit" id="setvalue" onclick="set()" href = "allSellToProcessor.html">Buy Crops</a>
+    
+
+        <div>
+            <p id="processor_address"></p>
+            <p id="processor_name"></p>
+            <p id="product_id"></p>
+            <p id="processor_location"></p>
+            <p id="verified"></p>
+            <p id="processor_phone"></p>
+            <p id="product_quantity"></p>
+            <p id="production__date"></p>
+            <p id="product_expiry_date"></p>
+            
+
+        </div>
+	</div>
+	<script type="text/javascript">
+
+		var web3;
+		if (typeof web3 !== 'undefined') {
+				web3 = new Web3(web3.currentProvider);
+		}
+		else {
+			web3 = new Web3(new Web3.providers.HttpProvider("http://127.0.0.1:7545"));
+	
+		}
+		console.log(web3);
+	   
+		web3.eth.defaultAccount = web3.eth.accounts[0];
+
+		var abi = [
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_processor_id",
+				"type": "uint256"
+			}
+		],
+		"name": "getProcessorInfos",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			},
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			},
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			},
+			{
+				"internalType": "int256",
+				"name": "",
+				"type": "int256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_processor_address",
+				"type": "address"
+			},
+			{
+				"internalType": "string",
+				"name": "p_name",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_product_id",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "loc",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_verified",
+				"type": "string"
+			},
+			{
+				"internalType": "int256",
+				"name": "_phone_no",
+				"type": "int256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_quantity",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "_production_date",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_expiry_date",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "e_price",
+				"type": "string"
+			}
+		],
+		"name": "storeProcessorInfo",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	}
+]
+		
+		contract = new web3.eth.Contract(abi, "0xA4C9288d79dCB1b0d97D53Ca28810CD129dE71F0");
+
+		$(document).ready(function () {
+			$("#SubmitDetails").click(function () {
+				console.log("Submit Details has been clicked!")
+				// Blockchain cal
+					var acnt = $("#paddr").val();
+					//var fid = $("#fid").val();
+					//var pname = $("#pname").val();
+	                var pname = $("#pname").val();
+                    var productId = $("#productId").val();
+					var loc = $("#loc").val();
+                    var seed = $("#seed").val();
+                    var contact = $("#contact").val();
+                    var quantity = $("#quantity").val();
+                    var production_date = $("#production_date").val();
+                    var Expiry_date = $("#Expiry_date").val();
+                    var exprice = $("#exprice").val();
+					console.log(acnt, pname, productId, loc, seed, contact, quantity, production_date, Expiry_date, exprice);	
+	
+					contract.methods.storeProcessorInfo(acnt, pname, productId, loc, seed, contact, quantity, production_date, Expiry_date, exprice).send({ 
+						from: "0x66Ad57fa29a77da7318EEcF49b56176dDb9BA68f",
+					})
+					.then(function (trx) {
+						console.log(trx);
+						alert("successfully added");
+					})
+
+					
+			});
+			$("#get_details").click(function () {
+				console.log("Get Details has been clicked!")
+				// Blockchain cal
+					//var acnt = $("#farmer_address").val();
+					var pid = $("#pid").val();
+					
+					//var fname = $("#farmer_name").val();	
+					//var contact = $("#contact").val();
+					//var loc = $("#loc").val();
+					console.log(pid);
+					contract.methods.getProcessorInfos(pid).call(function(error, result){ 
+						console.log(result);
+						let processor_address = result[0];
+						let processor_name = result[1];
+						let product_id = result[2];
+						let processor_location = result[3];
+                        let verified = result[4];
+                        let processor_phone = result[5];
+                        let product_quantity = result[6];
+                        let production__date = result[7];
+                        let product_expiry_date = result[8];
+                        
+
+						document.getElementById("processor_address").innerHTML = "processor Address: " + processor_address;
+						document.getElementById("processor_name").innerHTML = "processor Name: " + processor_name;
+						document.getElementById("product_id").innerHTML = "product id:" + product_id;
+						document.getElementById("processor_location").innerHTML ="processor Location: " + processor_location;
+                        document.getElementById("verified").innerHTML ="verified: " + verified;
+                        document.getElementById("processor_phone").innerHTML ="processor phone: " + processor_phone;
+                        document.getElementById("product_quantity").innerHTML ="product_quantity: " + product_quantity;
+                        document.getElementById("production_date").innerHTML ="production date: " + production_date;
+                        document.getElementById("product_expiry_date").innerHTML ="product_expiry_date: " + product_expiry_date;
+					});
+	
+		});
+	});
+	</script>
+</body>
+</html>

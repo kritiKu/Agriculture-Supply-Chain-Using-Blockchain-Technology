@@ -1,0 +1,171 @@
+<html>
+
+<head>
+	<script src="https://code.jquery.com/jquery-3.4.1.js"
+		integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js@1.2.6/dist/web3.min.js"></script>
+	
+	<link href="./stylesheet/farmer.css" rel='stylesheet' type='text/css'>
+   <!-- <script src="./agri.js"></script> -->
+   
+</head>
+   <body>
+    <div class="form" id="sign-up-form">
+        <h2 class="form-title">Farmer</h2>
+        <input type="text" class="input-std" id="faddr" placeholder="Farmer Address">
+		<input type="text" class="input-std" id="fname" placeholder="Farmers Name">
+        <input type="text" class="input-std" id="contact" placeholder="Phone">
+		<input type="text" class="input-std" id="loc" placeholder="Location">
+	
+		<input type="submit" class="btn-submit" value="Submit Details" id="SubmitDetails"><br><br><br>
+
+		<input type="text" class="input-std" id="fid" placeholder="Farmer Id">
+        <input type="button" class="btn-submit" value="Get Details" id="get_details"><br><br>
+
+        <div>
+            <p id="farmer_address"></p>
+            <p id="farmer_name"></p>
+            <p id="farmer_phone"></p>
+            <p id="farmer_location"></p>
+
+        </div>
+	</div>
+	<script type="text/javascript">
+
+		var web3;
+		if (typeof web3 !== 'undefined') {
+				web3 = new Web3(web3.currentProvider);
+		}
+		else {
+			web3 = new Web3(new Web3.providers.HttpProvider("http://127.0.0.1:7545"));
+	
+		}
+		console.log(web3);
+	   
+		web3.eth.defaultAccount = web3.eth.accounts[0];
+
+		var abi = [
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_farmer_id",
+				"type": "uint256"
+			}
+		],
+		"name": "getfarmerInfos",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			},
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			},
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_farmer_address",
+				"type": "address"
+			},
+			{
+				"internalType": "string",
+				"name": "f_name",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "p_no",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "loc",
+				"type": "string"
+			}
+		],
+		"name": "storefarmerInfo",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	}
+];
+		
+		contract = new web3.eth.Contract(abi, "0x41cb46e499b5845c1acaDf6Dd73F435bA1d2Fb4A");
+
+		$(document).ready(function () {
+			$("#SubmitDetails").click(function () {
+				console.log("Submit Details has been clicked!")
+				// Blockchain cal
+					var acnt = $("#faddr").val();
+					//var fid = $("#fid").val();
+					
+					var fname = $("#fname").val();	
+					var contact = $("#contact").val();
+					var loc = $("#loc").val();
+					console.log(acnt, fname, contact, loc);	
+	
+					contract.methods.storefarmerInfo(acnt,  fname, contact,loc).send({ 
+						from: "0x66Ad57fa29a77da7318EEcF49b56176dDb9BA68f",
+					})
+					.then(function (trx) {
+						console.log(trx);
+						alert("successfully added");
+					})
+
+					
+			});
+			$("#get_details").click(function () {
+				console.log("Get Details has been clicked!")
+				// Blockchain cal
+					//var acnt = $("#farmer_address").val();
+					var fid = $("#fid").val();
+					
+					//var fname = $("#farmer_name").val();	
+					//var contact = $("#contact").val();
+					//var loc = $("#loc").val();
+					console.log(fid);
+					contract.methods.getfarmerInfos(fid).call(function(error, result){ 
+						console.log(result);
+						let farmer_address = result[1];
+						let farmer_name = result[2];
+						let farmer_phone = result[3];
+						let farmer_location = result[4];
+
+						document.getElementById("farmer_address").innerHTML = "Farmer Address: " + farmer_address;
+						document.getElementById("farmer_name").innerHTML = "Farmer Name: " + farmer_name;
+						document.getElementById("farmer_phone").innerHTML = "Farmer Phone:" + farmer_phone;
+						document.getElementById("farmer_location").innerHTML ="Farmer Location: " + farmer_location;
+					});
+					
+					
+	
+	
+		});
+	});
+	</script>
+</body>
+</html>

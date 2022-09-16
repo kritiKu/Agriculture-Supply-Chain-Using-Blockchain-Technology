@@ -1,0 +1,152 @@
+<html>
+
+<head>
+	<script src="https://code.jquery.com/jquery-3.4.1.js"
+		integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js@1.2.6/dist/web3.min.js"></script>
+	
+	<link href="./stylesheet/product.css" rel='stylesheet' type='text/css'>
+   <!-- <script src="./agri.js"></script> -->
+   
+</head>
+   <body>
+    <div class="form" id="sign-up-form">
+		<h2 class="form-title">Product</h2>
+		<input type="text" class="input-std" id="product_id" placeholder="product id">
+		<input type="text" class="input-std" id="product_name" placeholder="product name">
+
+		<br>
+		<table>  
+			<tr><td><b><label class = "black">Product Name</label></td><td>: </td></b><td><span class="black"> Product Id</span></td></tr>
+		<tr><td><b><label class = "black"><br>Sugar</label></td><td><br>:</td></b><td><span class="black" ></span><br> 1</td></tr>
+			<tr><td><b><label class = "black">Jam</label></td><td>: </td></b><td><span class="black"> 2</span></td></tr>
+			<tr><td><b><label class = "black">Wheat</label></td><td>: </td></b><td><span class="black"> 3</span></td></tr>
+			<tr><td><b><label class = "black">Bread</label></td><td>: </td></b><td><span class="black"> 4</span></td></tr>
+			<tr><td><b><label class = "black">Tea</label></td><td>: </td></b><td><span class="black"> 5</span></td></tr>
+			<tr><td><b><label class = "black">Tomato</label></td><td>: </td></b><td><span class="black"> 6</span></td></tr>
+			<tr><td><b><label class = "black">Rice</label></td><td>: </td></b><td><span class="black"> 7</span></td></tr>
+			<tr><td><b><label class = "black">Coffee</label></td><td>: </td></b><td><span class="black"> 8</span></td></tr>
+			<tr><td><b><label class = "black">Cookies</label></td><td>: </td></b><td><span class="black"> 9</span></td></tr>
+		<input type="submit" class="btn-submit" value="Submit Details" id="SubmitDetails"><br><br><br>
+
+		<input type="text" class="input-std" id="proid" placeholder="p Id">
+        <input type="button" class="btn-submit" value="Get Details" id="get_details"><br><br>
+
+        <div>
+            <p id="Product_Id"></p>
+            <p id="Product_Name"></p>
+
+        </div>
+	</div>
+	<script type="text/javascript">
+
+		var web3;
+		if (typeof web3 !== 'undefined') {
+				web3 = new Web3(web3.currentProvider);
+		}
+		else {
+			web3 = new Web3(new Web3.providers.HttpProvider("http://127.0.0.1:7545"));
+	
+		}
+		console.log(web3);
+	   
+		web3.eth.defaultAccount = web3.eth.accounts[0];
+
+		var abi = [
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_product_id",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "_product_name",
+				"type": "string"
+			}
+		],
+		"name": "storeproduct",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_p_id",
+				"type": "uint256"
+			}
+		],
+		"name": "getproduct",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	}
+]
+		contract = new web3.eth.Contract(abi, "0x249B9f42Af8621d7F177d6550b75Ce4082F48638");//contract address
+
+		$(document).ready(function () {
+			$("#SubmitDetails").click(function () {
+				console.log("Submit Details has been clicked!")
+				// Blockchain cal
+					//var acnt = $("#proaddr").val();
+					var product_id = $("#product_id").val();
+					
+					var product_name = $("#product_name").val();	
+					console.log(product_id, product_name);	
+	
+					contract.methods. storeproduct(product_id, product_name).send({ 
+						from: "0xf3A1D302C8e95077637C6De781181d4716B25326", //ganache first account address
+					})
+					.then(function (trx) {
+						console.log(trx);
+						alert("successfully added");
+					})
+
+					
+			});
+			$("#get_details").click(function () {
+				console.log("Get Details has been clicked!")
+				// Blockchain cal
+					//var acnt = $("#farmer_address").val();
+					var proid = $("#proid").val();
+					
+					//var fname = $("#farmer_name").val();	
+					//var contact = $("#contact").val();
+					//var loc = $("#loc").val();
+					console.log(proid);
+					contract.methods.getproduct(proid).call(function(error, result){ 
+						console.log(result);
+						let Product_Id = result[1];
+						let Product_Name = result[2];
+
+						document.getElementById("Product_Id").innerHTML = "Product Id: " + Product_Id;
+						document.getElementById("Product_Name").innerHTML = "Product Name: " + Product_Name;
+						
+					});
+				
+		});
+	});
+	</script>
+</body>
+</html>
+
+<!--metamask 1st account address-->
